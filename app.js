@@ -41,7 +41,7 @@ app.use((error, req, res, next) => {
 mongoose
   .connect('mongodb+srv://everly:xanhduong@elearning.whpyx.mongodb.net/elearning?retryWrites=true&w=majority')
   .then(() => {
-    app.listen(5000);
+    app.listen(process.env.PORT || 5000);
   })
   .catch(err => {
     console.log(err);
