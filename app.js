@@ -1,12 +1,20 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const cors = require('cors');
 
 const userRoutes = require('./routes/user-routes');
 const HttpError = require('./models/http-error');
 const bodyParse = require('body-parser');
 
 const app = express();
+
+const corsOptions = {
+  origin: 'http://localhost:3000/',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
+app.use(cors(corsOptions));
 
 app.use(bodyParse.json());
 
