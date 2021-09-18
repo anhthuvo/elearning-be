@@ -70,7 +70,7 @@ const login = async (req, res, next) => {
 
     let existingUser;
     try {
-        existingUser = await User.findOne({ email: email }, '-password')
+        existingUser = await User.findOne({ email: email })
     } catch (err) {
         const error = new HttpError(
             'Logging in failed, please try again later - 1',
