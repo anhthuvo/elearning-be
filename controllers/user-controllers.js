@@ -5,24 +5,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 
-const getUsers = async (req, res, next) => {
-    let users;
-    try {
-        users = await User.find({}, '-password');
-    } catch (err) {
-        const error = new HttpError(
-            'Fetching users failed, please try again later.',
-            500
-        );
-        return next(error);
-    }
-    res.json({ users: users.map(user => user.toObject({ getters: true })) });
-};
-
 const getUser = async (req, res, next) => {
     let existingUser;
     try {
-        existingUser = await User.findOne({ _id: req.userData.userId }, '-password')
+        if (req.userData.role !== 'HV' && req.userData.userId !== req.params.uid) throw "";
+        existingUser = await User.findOne({ _id: req.params.uid }, '-password')
         if (!existingUser) throw "";
     } catch (err) {
         const error = new HttpError(
@@ -44,7 +31,7 @@ const signup = async (req, res, next) => {
 
     let existingUser
     try {
-        existingUser = await User.findOne({ email: req.body.email })
+        existingUser = await User.findOne({ email: req.body.email }, '-password')
     } catch (err) {
         const error = new HttpError(
             'Signing up failed, please try again later.',
@@ -83,7 +70,7 @@ const login = async (req, res, next) => {
 
     let existingUser;
     try {
-        existingUser = await User.findOne({ email: email })
+        existingUser = await User.findOne({ email: email }, '-password')
     } catch (err) {
         const error = new HttpError(
             'Logging in failed, please try again later - 1',
@@ -139,11 +126,12 @@ const updateAvatar = async (req, res, next) => {
     let existingUser;
     let updatedUser;
     try {
-        existingUser = await User.findOne({ _id: req.userData.userId })
+        if (req.userData.role !== 'HV' && req.userData.userId !== req.params.uid) throw "";
+        existingUser = await User.findOne({ _id: req.params.uid }, '-password')
         if (!existingUser) throw "";
 
         const path = req.file.path.replace(/\\/g, "/");
-        updatedUser = await User.findOneAndUpdate({ _id: req.userData.userId }, { avatar: path }, { new: true });
+        updatedUser = await User.findOneAndUpdate({ _id: req.params.uid }, { avatar: path }, { new: true });
     } catch (err) {
         const error = new HttpError(
             'Failed to update avatar',
@@ -165,7 +153,7 @@ const updateUser = async (req, res, next) => {
     let existingUser;
     let updatedUser;
     try {
-        if (req.userData.userId !== req.params.uid) throw "";
+        if (req.userData.role !== 'HV' && req.userData.userId !== req.params.uid) throw "";
         existingUser = await User.findOne({ _id: req.params.uid })
     }
     catch (err) {
@@ -197,6 +185,20 @@ const updateUser = async (req, res, next) => {
     }
 
     res.json(updatedUser);
+};
+
+const getUsers = async (req, res, next) => {
+    let users;
+    try {
+        users = await User.find({}, '-password');
+    } catch (err) {
+        const error = new HttpError(
+            'Fetching users failed, please try again later.',
+            500
+        );
+        return next(error);
+    }
+    res.json({ users: users.map(user => user.toObject({ getters: true })) });
 };
 
 module.exports = {
