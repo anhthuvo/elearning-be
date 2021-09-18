@@ -6,7 +6,6 @@ const UserSchema = new mongoose.Schema({
         required: 'Email address is required', 
         unique: true,
         trim: true,
-        lowercase: true,
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Email is not valid'],
     },
     password: {
@@ -17,7 +16,6 @@ const UserSchema = new mongoose.Schema({
         type: String, 
         required: 'Fisrt name is required', 
         trim: true,
-        lowercase: true,
      },
     lastname: {
         type: String, 
@@ -28,8 +26,8 @@ const UserSchema = new mongoose.Schema({
     role: {
         type: String, 
         require: true,
-        enum: ['student', 'teacher', 'admin'],
-        default: 'student'
+        enum: ['HV', 'GV', 'AD'],
+        default: 'HV'
     },
     phone: {
         type: String, 

@@ -3,7 +3,7 @@ const router = express.Router();
 const { check } = require('express-validator');
 
 const userController = require('../controllers/user-controllers');
-const { signup, getUsers, login, updateAvatar, updateUser } = userController;
+const { signup, getUsers, login, updateAvatar, updateUser, getUser } = userController;
 
 const { checkAuthUser, checkAuthAdmin } = require('../middleware/check-auth');
 const fileUpload = require('../middleware/file-upload');
@@ -23,18 +23,16 @@ router.post('/signup',
     ],
     signup);
 
-router.get('/login', login);
+router.post('/login', login);
 
-router.use(checkAuthUser);
+router.get('/getuser', checkAuthUser, getUser);
 
-router.put('/change-avatar', fileUpload.single('avatar'), updateAvatar);
+router.put('/change-avatar', checkAuthUser, fileUpload.single('avatar'), updateAvatar);
 
-router.put('/:uid', updateUser);
+router.put('/:uid', checkAuthUser, updateUser);
 
-router.use(checkAuthAdmin);
+router.get('/all', checkAuthAdmin, getUsers);
 
-router.get('/all', getUsers);
-
-router.delete('/uid',);
+router.delete('/uid', checkAuthAdmin, );
 
 module.exports = router;

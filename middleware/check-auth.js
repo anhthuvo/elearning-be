@@ -20,7 +20,7 @@ const checkAuthUser = (req, res, next) => {
 
 const checkAuthAdmin = (req, res, next) => {
   try {
-    const isAdmin = req.userData.role === 'admin';
+    const isAdmin = req.userData.role === 'AD';
     if (!isAdmin)  throw new Error('Authentication admin failed!');
   } catch (err) {
     const error = new HttpError('Authentication admin failed!', 401);
