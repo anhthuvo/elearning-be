@@ -125,6 +125,7 @@ const login = async (req, res, next) => {
 const updateAvatar = async (req, res, next) => {
     let existingUser;
     let updatedUser;
+    let avatar;
     try {
         if (req.userData.role !== 'HV' && req.userData.userId !== req.params.uid) throw "";
         existingUser = await User.findOne({ _id: req.params.uid }, '-password')
@@ -132,6 +133,7 @@ const updateAvatar = async (req, res, next) => {
 
         const path = req.file.path.replace(/\\/g, "/");
         updatedUser = await User.findOneAndUpdate({ _id: req.params.uid }, { avatar: path }, { new: true });
+        avatar = updatedUser.avatar;
     } catch (err) {
         const error = new HttpError(
             'Failed to update avatar',
@@ -145,7 +147,7 @@ const updateAvatar = async (req, res, next) => {
         fs.unlink(oldPath, (err) => console.log(err));
     }
     finally {
-        res.json(updatedUser);
+        res.json({avatar});
     }
 };
 
