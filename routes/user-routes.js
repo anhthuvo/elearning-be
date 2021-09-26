@@ -27,7 +27,7 @@ router.post('/login', login);
 
 router.get('/:uid', checkAuthUser, getUser);
 
-router.put('/change-avatar/:uid', checkAuthUser, fileUpload.single('avatar'), updateAvatar);
+router.post('/change-avatar/:uid', checkAuthUser, fileUpload.single('avatar'), updateAvatar);
 
 router.put('/:uid', checkAuthUser, updateUser);
 

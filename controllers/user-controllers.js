@@ -54,7 +54,7 @@ const signup = async (req, res, next) => {
         createdUser = new User({ ...req.body, password: hashedPass });
         await createdUser.save();
     } catch (err) {
-        console.error(err);
+        err && console.error(err);
         const error = new HttpError(
             'Signing up failed, please try again.',
             500
@@ -91,7 +91,7 @@ const login = async (req, res, next) => {
     try {
         isValidPass = await bcrypt.compare(password, existingUser.password);
     } catch (err) {
-        console.log(err)
+        err && console.log(err)
         const error = new HttpError(
             'Logging in failed, please try again later. - 2',
             500
@@ -135,6 +135,7 @@ const updateAvatar = async (req, res, next) => {
         updatedUser = await User.findOneAndUpdate({ _id: req.params.uid }, { avatar: path }, { new: true });
         avatar = updatedUser.avatar;
     } catch (err) {
+        err && console.log(err);
         const error = new HttpError(
             'Failed to update avatar',
             500
@@ -144,7 +145,7 @@ const updateAvatar = async (req, res, next) => {
 
     try {
         const oldPath = existingUser.avatar;
-        fs.unlink(oldPath, (err) => console.log(err));
+        fs.unlink(oldPath, (err) => err && console.log(err));
     }
     finally {
         res.json({avatar});
