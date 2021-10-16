@@ -3,10 +3,12 @@ const router = express.Router();
 const { check } = require('express-validator');
 
 const userController = require('../controllers/user-controllers');
-const { signup, getUsers, login, updateAvatar, updateUser, getUser } = userController;
+const { signup, getUsers, login, updateAvatar, updateUser, getUser, deteleUsers, getRegistrations } = userController;
 
 const { checkAuthUser, checkAuthAdmin } = require('../middleware/check-auth');
 const fileUpload = require('../middleware/file-upload');
+
+
 
 router.post('/signup',
     [
@@ -17,7 +19,7 @@ router.post('/signup',
             .not()
             .isEmpty(),
         check('email')
-            .normalizeEmail() // Test@test.com => test@test.com
+            .normalizeEmail()
             .isEmail(),
         check('password').isLength({ min: 6 })
     ],
@@ -25,14 +27,16 @@ router.post('/signup',
 
 router.post('/login', login);
 
-router.get('/:uid', checkAuthUser, getUser);
-
 router.post('/change-avatar/:uid', checkAuthUser, fileUpload.single('avatar'), updateAvatar);
 
 router.put('/:uid', checkAuthUser, updateUser);
 
-router.get('/all', checkAuthAdmin, getUsers);
+router.delete('/delete', checkAuthAdmin, deteleUsers);
 
-router.delete('/uid', checkAuthAdmin, );
+router.get('/', checkAuthAdmin, getUsers);
+
+router.get('/registrations', checkAuthUser, getRegistrations);
+
+router.get('/:uid', checkAuthUser, getUser);
 
 module.exports = router;
