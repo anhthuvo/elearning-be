@@ -78,7 +78,7 @@ const createCourse = async (req, res, next) => {
  *         - in: path
  *           name: id
  *           required: true
- *           description: course ID
+ *           description: course path
  *           default: 6162f1dfed5de38d649c881e
  *     security: 
  *         - bearerAuth: []
@@ -86,10 +86,10 @@ const createCourse = async (req, res, next) => {
 const getCourse = async (req, res, next) => {
     let existingCourse;
     try {
-        existingCourse = await Course.findOne({ _id: req.params.id })
+        existingCourse = await Course.findOne({ path: req.params.id })
         if (!existingCourse) {
             const error = new HttpError(
-                'Could not find the course with this id ' + req.params.id,
+                'Could not find the course with this path ' + req.params.id,
                 500
             );
             return next(error);

@@ -31,6 +31,10 @@ const CourseSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    path: {
+        type: String,
+        unique: true
+    },
     createdAt: {
         type: Date,
         default: Date.now
