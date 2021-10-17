@@ -31,6 +31,8 @@ const { validationResult } = require('express-validator');
  *               category:
  *                  type: string
  *                  enum: ['programming thinking', 'back-end', 'front-end', 'mobile', 'design', 'full-stack']
+ *               path: 
+ *                  type: string
  *             example:   # Sample object
  *               title: How to build an MERN app  
  *               desc: Using React, Node.js, Express & MongoDB you'll learn how to build a Full Stack MERN Project - from start to finish. The App is called "Memories" and it is a simple social media MERN application that allows users to post interesting events that happened in their lives.
@@ -38,6 +40,7 @@ const { validationResult } = require('express-validator');
  *               source: [https://www.youtube.com/embed/ngc9gnGgUdA]
  *               image: https://i.morioh.com/67feeaf72f.png
  *               category: programming thinking
+ *               path: how-to-build-an-MERN-app  
  *     responses:
  *          '201':
  *              description: OK
@@ -313,6 +316,9 @@ const deteleCourses = async (req, res, next) => {
  *                      example:   # Sample object
  *                              courseId: '000000000012'
  *                              userId: '000000000012'
+ *     responses:
+ *          '200':
+ *              description: OK
 */
 const registerCourse = async (req, res, next) => {
     let result;
@@ -410,6 +416,9 @@ const registerCourse = async (req, res, next) => {
  *           type: integer
  *           required: true
  *           description: Maximum item per page. if limit=0 total item will be returned
+ *     responses:
+ *          '200':
+ *              description: OK
 */
 const getRegistrations = async (req, res, next) => {
     let result;
@@ -494,7 +503,7 @@ const approveRegistration = async (req, res, next) => {
             401
         ))
 
-        for (let i=0; i < existingRegs.length; i++) {
+        for (let i = 0; i < existingRegs.length; i++) {
             let item = existingRegs[i];
             let userId = item.userId;
             let courseId = item.courseId;
@@ -526,14 +535,14 @@ const approveRegistration = async (req, res, next) => {
 
             existingCourse.students.push(userId);
             existingUser.courses.push(courseId);
-            
+
             let [addStudent, addCourse] = await Promise.all([
                 existingCourse.save(),
                 existingUser.save(),
             ])
             if (addStudent) {
                 approvedReg.push(courseId);
-                await Registration.deleteOne({ _id: item._id})
+                await Registration.deleteOne({ _id: item._id })
             }
         }
     }
@@ -552,6 +561,57 @@ const approveRegistration = async (req, res, next) => {
     res.status(201).json({ approved_registrations: approvedReg });
 };
 
+/**
+ * @swagger
+ * /api/courses/reject:
+ *   post:
+ *     summary: Approve registration 
+ *     description: Only admin token can access.
+ *     produces:
+ *         - application/json
+ *     requestBody:
+ *         content:
+ *              application/json:
+ *                  schema:      # Request body contents
+ *                      type: object
+ *                      properties:
+ *                          registationIds:
+ *                              type: array
+ *                              required: true
+ *                      example:   # Sample object
+ *                              registationIds: ['000000000012']
+ *     security: 
+ *         - bearerAuth: []
+ *     responses:
+ *          '200':
+ *              description: OK
+*/
+const rejectRegistration = async (req, res, next) => {
+    let rejectedReg;
+    try {
+        const registationIds = Array.isArray(req.body.registationIds) && req.body.registationIds;
+
+        if (!registationIds) return next(new HttpError(
+            'Invalid data',
+            400
+        ));
+
+        rejectedReg = await Registration.deleteMany({ _id: { $in: registationIds } });
+    }
+    catch (err) {
+        err && console.log(err);
+        const error = new HttpError(
+            'Reject registrations failed',
+            500,
+            {
+                rejected_registrations: rejectedReg
+            }
+        );
+        return next(error);
+    }
+
+    res.status(200).json({ rejected_registrations: rejectedReg });
+};
 module.exports = {
     createCourse,
     getCourses,
@@ -560,5 +620,6 @@ module.exports = {
     deteleCourses,
     registerCourse,
     getRegistrations,
-    approveRegistration
+    approveRegistration,
+    rejectRegistration
 }

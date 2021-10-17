@@ -3,7 +3,17 @@ const router = express.Router();
 const { check } = require('express-validator');
 
 const courseController = require('../controllers/course-controller');
-const { createCourse, getCourse, deteleCourses, getCourses, updateCourse, registerCourse, getRegistrations, approveRegistration } = courseController;
+const {
+    createCourse,
+    getCourse,
+    deteleCourses,
+    getCourses,
+    updateCourse,
+    registerCourse,
+    getRegistrations,
+    approveRegistration,
+    rejectRegistration
+} = courseController;
 
 const { checkAuthAdmin, decodeToken } = require('../middleware/check-auth');
 
@@ -44,5 +54,7 @@ router.get('/all', getCourses);
 router.get('/:id', decodeToken, getCourse);
 
 router.post('/approve', checkAuthAdmin, approveRegistration);
+
+router.post('/reject', checkAuthAdmin, rejectRegistration);
 
 module.exports = router;
