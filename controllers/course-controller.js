@@ -19,23 +19,25 @@ const { validationResult } = require('express-validator');
  *           schema:      # Request body contents
  *             type: object
  *             properties:
- *               firstname:
+ *               title:
  *                 type: string
- *               lastname:
+ *               desc:
  *                 type: string
- *               password: 
+ *               author: 
  *                  type: string
  *                  format: password
- *               email:
- *                 type: string
- *                 format: email
+ *               source:
+ *                 type: array
+ *               category:
+ *                  type: string
+ *                  enum: ['programming thinking', 'back-end', 'front-end', 'mobile', 'design', 'full-stack']
  *             example:   # Sample object
  *               title: How to build an MERN app  
  *               desc: Using React, Node.js, Express & MongoDB you'll learn how to build a Full Stack MERN Project - from start to finish. The App is called "Memories" and it is a simple social media MERN application that allows users to post interesting events that happened in their lives.
  *               author: [JavaScript Mastery]
  *               source: [https://www.youtube.com/embed/ngc9gnGgUdA]
  *               image: https://i.morioh.com/67feeaf72f.png
- *               category: programing
+ *               category: programming thinking
  *     responses:
  *          '201':
  *              description: OK

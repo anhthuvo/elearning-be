@@ -23,7 +23,8 @@ const CourseSchema = new mongoose.Schema({
     },
     category: {
         type: String, 
-        require: false
+        require: false,
+        enum: ['programming thinking', 'back-end', 'front-end', 'mobile', 'design', 'full-stack']
     },
     students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     rating: {
