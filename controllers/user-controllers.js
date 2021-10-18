@@ -44,7 +44,7 @@ const getUser = async (req, res, next) => {
         );
         return next(error);
     }
-    res.json({...existingUser, registeredCourses});
+    res.json({...existingUser._doc, registeredCourses});
 };
 
 /**
@@ -329,7 +329,9 @@ const updateUser = async (req, res, next) => {
  *           enum: [ HV, GV, AD]
  *     security: 
  *         - bearerAuth: [] 
- * 
+ *     responses:
+ *          '200':
+ *              description: OK
 */
 const getUsers = async (req, res, next) => {
     let users;
