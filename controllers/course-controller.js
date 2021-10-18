@@ -612,6 +612,39 @@ const rejectRegistration = async (req, res, next) => {
 
     res.status(200).json({ rejected_registrations: rejectedReg });
 };
+
+/**
+ * @swagger
+ * /api/courses/unregister/{id}:
+ *   post:
+ *     summary: unregister course 
+ *     responses:
+ *          '200':
+ *              description: OK
+ *     parameters: 
+ *         - in: path
+ *           name: id
+ *           required: true
+ *           description: registration id
+*/
+const unregister = async (req, res, next) => {
+    let deletedReg;
+    try {
+        const regId = req.query.id;
+        deletedReg = await Registration.deleteOne({ _id: regId });
+    }
+    catch (err) {
+        err && console.log(err);
+        const error = new HttpError(
+            'unregister failed',
+            500
+        );
+        return next(error);
+    }
+
+    res.status(200).json(deletedReg);
+};
+
 module.exports = {
     createCourse,
     getCourses,
@@ -621,5 +654,6 @@ module.exports = {
     registerCourse,
     getRegistrations,
     approveRegistration,
-    rejectRegistration
+    rejectRegistration,
+    unregister
 }

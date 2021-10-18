@@ -12,7 +12,8 @@ const {
     registerCourse,
     getRegistrations,
     approveRegistration,
-    rejectRegistration
+    rejectRegistration,
+    unregister
 } = courseController;
 
 const { checkAuthAdmin, decodeToken } = require('../middleware/check-auth');
@@ -56,5 +57,7 @@ router.get('/:id', decodeToken, getCourse);
 router.post('/approve', checkAuthAdmin, approveRegistration);
 
 router.post('/reject', checkAuthAdmin, rejectRegistration);
+
+router.post('/unregister/:id', unregister);
 
 module.exports = router;
