@@ -630,7 +630,7 @@ const rejectRegistration = async (req, res, next) => {
 const unregister = async (req, res, next) => {
     let deletedReg;
     try {
-        const regId = req.query.id;
+        const regId = req.params.id;
         deletedReg = await Registration.deleteOne({ _id: regId });
     }
     catch (err) {
