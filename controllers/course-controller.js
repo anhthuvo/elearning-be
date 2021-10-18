@@ -30,7 +30,7 @@ const { validationResult } = require('express-validator');
  *                 type: array
  *               category:
  *                  type: string
- *                  enum: ['programming thinking', 'back-end', 'front-end', 'mobile', 'design', 'full-stack']
+ *                  enum: ['programming-thinking', 'back-end', 'front-end', 'mobile', 'design', 'full-stack']
  *               path: 
  *                  type: string
  *             example:   # Sample object
@@ -39,7 +39,7 @@ const { validationResult } = require('express-validator');
  *               author: [JavaScript Mastery]
  *               source: [https://www.youtube.com/embed/ngc9gnGgUdA]
  *               image: https://i.morioh.com/67feeaf72f.png
- *               category: programming thinking
+ *               category: programming-thinking
  *               path: how-to-build-an-MERN-app  
  *     responses:
  *          '201':

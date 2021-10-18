@@ -25,10 +25,18 @@ const fs = require('fs');
 */
 const getUser = async (req, res, next) => {
     let existingUser;
+    let registeredCourses;
     try {
         if (req.userData.role !== 'AD' && req.userData.userId !== req.params.uid) throw "";
         existingUser = await User.findOne({ _id: req.params.uid }, '-password').populate('courses', '-source');
-        if (!existingUser) throw "";
+        if (!existingUser) next(new HttpError(
+            'User does not exist',
+            400
+        ))
+
+        const regs = await Registration.find({ userId: existingUser._id });
+        registeredCourses = regs;
+
     } catch (err) {
         const error = new HttpError(
             'Fetching users failed, please try again later.',
@@ -36,7 +44,7 @@ const getUser = async (req, res, next) => {
         );
         return next(error);
     }
-    res.json(existingUser);
+    res.json({...existingUser, registeredCourses});
 };
 
 /**
