@@ -19,7 +19,7 @@ const RegistrationSchema = new mongoose.Schema({
     },
     path: {
         type: String,
-        required
+        required: true
     },
     createdAt: {
         type: Date,
