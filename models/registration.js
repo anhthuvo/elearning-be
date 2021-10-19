@@ -17,6 +17,10 @@ const RegistrationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    path: {
+        type: String,
+        required
+    },
     createdAt: {
         type: Date,
         default: Date.now

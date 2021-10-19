@@ -349,7 +349,8 @@ const registerCourse = async (req, res, next) => {
                 userId,
                 email: existingUser.email,
                 courseId,
-                title: existingCourse.title
+                title: existingCourse.title,
+                path: existingCourse.path
             });
             result = await createdRes.save();
         }
