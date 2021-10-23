@@ -60,7 +60,7 @@ const createCourse = async (req, res, next) => {
     } catch (err) {
         err && console.error(err);
         const error = new HttpError(
-            'Signing up failed, please try again.',
+            'Create course failed, please try again.',
             500
         );
         return next(error);
@@ -89,7 +89,7 @@ const createCourse = async (req, res, next) => {
 const getCourse = async (req, res, next) => {
     let existingCourse;
     try {
-        existingCourse = await Course.findOne({ path: req.params.id })
+        existingCourse = await Course.findOne({ title: req.params.id })
         if (!existingCourse) {
             const error = new HttpError(
                 'Could not find the course with this path ' + req.params.id,
