@@ -52,7 +52,7 @@ router.post('/registrations', checkAuthAdmin, getRegistrations);
 
 router.get('/all', getCourses);
 
-router.get('/:id', decodeToken, getCourse);
+router.post('/:id', decodeToken, getCourse);
 
 router.post('/approve', checkAuthAdmin, approveRegistration);
 

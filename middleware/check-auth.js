@@ -39,14 +39,12 @@ const checkAuthAdmin = (req, res, next) => {
 const decodeToken = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1]; // Authorization: 'Bearer TOKEN'
-    if (token) {
-      const decodedToken = jwt.verify(token, 'xanhduong');
-      req.userData = { userId: decodedToken.userId, role: decodedToken.role };
-    }
-    next();
+    const decodedToken = jwt.verify(token, 'xanhduong');
+    req.userData = { userId: decodedToken.userId, role: decodedToken.role };
   } catch (err) {
     next();
   }
+  next();
 }
 
 module.exports = { checkAuthUser, checkAuthAdmin, decodeToken }

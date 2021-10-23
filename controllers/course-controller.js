@@ -71,20 +71,23 @@ const createCourse = async (req, res, next) => {
 
 /**
  * @swagger
- * /api/courses/{id}:
- *   get:
+ * /api/courses/{path}:
+ *   post:
  *     summary: Get course information
  *     description: Any user can get course information except source. Only admin token or auth user was approved can have source of course
  *     produces:
  *         - application/json
  *     parameters: 
  *         - in: path
- *           name: id
+ *           name: path
  *           required: true
  *           description: course path
- *           default: 6162f1dfed5de38d649c881e
+ *           default: MongoDB Complete Introduction & Summary
  *     security: 
  *         - bearerAuth: []
+ *     responses:
+ *          '200':
+ *              description: OK 
 */
 const getCourse = async (req, res, next) => {
     let existingCourse;
@@ -387,6 +390,19 @@ const registerCourse = async (req, res, next) => {
  *     description: Only admin token can access.
  *     produces:
  *         - application/json
+ *     parameters: 
+ *         - in: query
+ *           name: page
+ *           type: integer
+ *           required: true
+ *           default: 0
+ *           description: The page number
+ *         - in: query
+ *           name: limit
+ *           default: 0
+ *           type: integer
+ *           required: true
+ *           description: Maximum item per page. if limit=0 total item will be returned
  *     requestBody:
  *         content:
  *              application/json:
@@ -404,19 +420,6 @@ const registerCourse = async (req, res, next) => {
  *                              userId: '000000000012'
  *     security: 
  *         - bearerAuth: []
- *     parameters: 
- *         - in: query
- *           name: page
- *           type: integer
- *           required: true
- *           default: 0
- *           description: The page number
- *         - in: query
- *           name: limit
- *           default: 0
- *           type: integer
- *           required: true
- *           description: Maximum item per page. if limit=0 total item will be returned
  *     responses:
  *          '200':
  *              description: OK
