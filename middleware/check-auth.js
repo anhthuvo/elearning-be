@@ -41,10 +41,10 @@ const decodeToken = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1]; // Authorization: 'Bearer TOKEN'
     const decodedToken = jwt.verify(token, 'xanhduong');
     req.userData = { userId: decodedToken.userId, role: decodedToken.role };
+    next();
   } catch (err) {
     next();
   }
-  next();
 }
 
 module.exports = { checkAuthUser, checkAuthAdmin, decodeToken }
