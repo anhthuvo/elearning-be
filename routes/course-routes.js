@@ -52,12 +52,12 @@ router.post('/registrations', checkAuthAdmin, getRegistrations);
 
 router.get('/all', getCourses);
 
-router.post('/:id', decodeToken, getCourse);
-
 router.post('/approve', checkAuthAdmin, approveRegistration);
 
 router.post('/reject', checkAuthAdmin, rejectRegistration);
 
 router.post('/unregister/:id', unregister);
+
+router.post('/:id', decodeToken, getCourse);
 
 module.exports = router;
