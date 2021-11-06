@@ -649,6 +649,60 @@ const unregister = async (req, res, next) => {
     res.status(200).json(deletedReg);
 };
 
+/**
+ * @swagger
+ * /api/courses/search:
+ *   post:
+ *     summary: search course 
+ *     responses:
+ *          '200':
+ *              description: OK
+ *     produces:
+ *         - application/json
+ *     requestBody:
+ *         content:
+ *              application/json:
+ *                  schema:      # Request body contents
+ *                      type: object
+ *                      properties:
+ *                          keyword:
+ *                              type: string
+ *                              required: true
+ *                          category:
+ *                              type: string
+ *                      example:   # Sample object
+ *                              keyword: javascript
+ *                              category: front-end
+*/
+const searchCourse = async (req, res, next) => {
+    let filteredCourses;
+    try {
+        const keyword = req.body.keyword;
+        const category = req.body.category;
+
+        if (category) {
+            filteredCourses = await Course.find({
+                $text: { $search: keyword },
+                category: category
+            }, '-source');
+        } else {
+            filteredCourses = await Course.find({
+                $text: { $search: keyword },
+            }, '-source');
+        }
+
+    }
+    catch (err) {
+        console.log(err)
+        return next(new HttpError(
+            'Searching failed',
+            500
+        ))
+    }
+
+    res.status(200).json({ courses: filteredCourses });
+}
+
 module.exports = {
     createCourse,
     getCourses,
@@ -659,5 +713,6 @@ module.exports = {
     getRegistrations,
     approveRegistration,
     rejectRegistration,
-    unregister
+    unregister,
+    searchCourse
 }
