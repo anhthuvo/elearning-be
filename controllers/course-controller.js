@@ -1,5 +1,4 @@
 const Course = require('../models/course');
-const Registration = require('../models/registration');
 const User = require('../models/user');
 
 const HttpError = require('../models/http-error');
@@ -332,7 +331,7 @@ const registerCourse = async (req, res, next) => {
         const existingUser = await User.findOne({ _id: userId }, '-password');
 
         if (existingCourse && existingUser) {
-            const existingRes = await Registration.findOne({ courseId, userId });
+            const existingRes = true
             if (existingRes) {
                 return next(new HttpError(
                     'Already registered course. Waiting for approval',
@@ -346,16 +345,6 @@ const registerCourse = async (req, res, next) => {
                     402
                 ))
             }
-
-            let createdRes;
-            createdRes = new Registration({
-                userId,
-                email: existingUser.email,
-                courseId,
-                title: existingCourse.title,
-                path: existingCourse.path
-            });
-            result = await createdRes.save();
         }
         else if (!existingCourse) {
             return next(new HttpError(
@@ -442,11 +431,8 @@ const getRegistrations = async (req, res, next) => {
         if (courseId) filter.courseId = courseId;
         if (userId) filter.userId = userId;
         // if (latest === false)
-        const registrations = await Registration.find({ ...filter }).skip(skip_item_num).limit(num_limit);
-        total = await Registration.find(filter).count();
 
         result = {
-            registrations: registrations.map(reg => reg.toObject({ getters: true })),
             total_page: Math.ceil(total / num_limit),
             current_page: page,
             total_registrations: total
@@ -500,12 +486,6 @@ const approveRegistration = async (req, res, next) => {
             400
         ));
 
-        const existingRegs = await Registration.find({ _id: { $in: registationIds } });
-
-        if (!existingRegs.length) return next(new HttpError(
-            'Registrations are not founded',
-            401
-        ))
 
         for (let i = 0; i < existingRegs.length; i++) {
             let item = existingRegs[i];
@@ -546,7 +526,6 @@ const approveRegistration = async (req, res, next) => {
             ])
             if (addStudent) {
                 approvedReg.push(courseId);
-                await Registration.deleteOne({ _id: item._id })
             }
         }
     }
@@ -600,7 +579,6 @@ const rejectRegistration = async (req, res, next) => {
             400
         ));
 
-        rejectedReg = await Registration.deleteMany({ _id: { $in: registationIds } });
     }
     catch (err) {
         err && console.log(err);
@@ -635,7 +613,6 @@ const unregister = async (req, res, next) => {
     let deletedReg;
     try {
         const regId = req.params.id;
-        deletedReg = await Registration.deleteOne({ _id: regId });
     }
     catch (err) {
         err && console.log(err);

@@ -42,7 +42,10 @@ const options = {
       }
     }
   },
-  apis: ['./controllers/course-controller.js', './controllers/user-controllers.js'], // files containing annotations as above
+  apis: ['./controllers/course-controller.js', 
+  './controllers/user/login.js',
+  './controllers/user/signup.js',
+], // files containing annotations as above
 };
 
 const openapiSpecification = swaggerJsdoc(options);
@@ -93,10 +96,11 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect('mongodb+srv://everly:xanhduong@elearning.whpyx.mongodb.net/elearning?retryWrites=true&w=majority')
+  .connect('mongodb+srv://everly:xanhduong@elearning.whpyx.mongodb.net/self-tracking?retryWrites=true&w=majority')
   .then(() => {
     app.listen(process.env.PORT || 5000);
+    console.log("Connect database successfully");
   })
   .catch(err => {
-    console.log(err);
+    console.log("err", err);
   });
