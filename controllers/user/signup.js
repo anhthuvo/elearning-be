@@ -25,10 +25,7 @@ const bcrypt = require('bcryptjs');
  *                 type: string
  *                 format: email
  *             example:   # Sample object
- *               firstname: Everly  
- *               lastname: Vo
  *               password: abc
- *               role: HV
  *               email: email@gmail.com
 */
 const signup = async (req, res, next) => {

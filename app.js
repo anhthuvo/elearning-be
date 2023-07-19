@@ -5,8 +5,8 @@ const cors = require('cors');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
+const factorRoutes = require('./routes/factor-routes');
 const userRoutes = require('./routes/user-routes');
-const courseRoutes = require('./routes/course-routes');
 const HttpError = require('./models/http-error');
 const bodyParse = require('body-parser');
 const app = express();
@@ -42,9 +42,12 @@ const options = {
       }
     }
   },
-  apis: ['./controllers/course-controller.js', 
+  apis: [
   './controllers/user/login.js',
   './controllers/user/signup.js',
+  './controllers/factorRecord/getRecords.js',
+  './controllers/factorRecord/createRecord.js',
+  './controllers/factorRecord/updateRecord.js',
 ], // files containing annotations as above
 };
 
@@ -75,8 +78,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/users', userRoutes);
-
-app.use('/api/courses', courseRoutes);
+app.use('/api/factors', factorRoutes);
 
 app.use((req, res, next) => {
   const error = new HttpError('Could not find this route.', 404);
