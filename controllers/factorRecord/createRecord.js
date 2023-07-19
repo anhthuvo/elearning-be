@@ -1,5 +1,5 @@
-const FactorRecord = require('../../models/factor-record');
-const HttpError = require('../../models/http-error');
+const FactorRecord = require("../../models/factor-record");
+const HttpError = require("../../models/http-error");
 
 /**
  * @swagger
@@ -13,7 +13,7 @@ const HttpError = require('../../models/http-error');
  *           schema:      # Request body contents
  *             type: object
  *             properties:
- *               password: 
+ *               password:
  *                  type: string
  *                  format: password
  *               email:
@@ -25,24 +25,28 @@ const HttpError = require('../../models/http-error');
  *     responses:
  *          '200':
  *              description: OK
-*/
+ */
 const submitRecord = async (req, res, next) => {
-    const { userId } =  req.userData
+  const { userId } = req.userData;
 
-    let factorRecord;
-    try {
-        factorRecord = new FactorRecord({ ...req.body, user: userId });
-        await factorRecord.save();
-    } catch (err) {
-        err && console.error(err);
-        const error = new HttpError(
-            'Create course failed, please try again.',
-            500
-        );
-        return next(error);
-    }
+  let factorRecord;
+  try {
+    factorRecord = new FactorRecord({
+      icon_source: req.body.icon_source,
+      value: req.body.value,
+      unit: req.body.unit,
+      start_at: req.body.start_at,
+      end_at: req.body.end_at,
+      user: userId,
+    });
+    await factorRecord.save();
+  } catch (err) {
+    err && console.error(err);
+    const error = new HttpError("Create course failed, please try again.", 500);
+    return next(error);
+  }
 
-    res.status(201).json(factorRecord);
+  res.status(201).json(factorRecord);
 };
 
-module.exports = submitRecord
+module.exports = submitRecord;
