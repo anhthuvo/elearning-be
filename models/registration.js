@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const RegistrationSchema = new mongoose.Schema({
     userId: {
-        type: String,
+        type: String, 
         required: true
     },
     courseId: {
