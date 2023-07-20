@@ -8,6 +8,6 @@ router.post('/record/submit', checkAuthUser, factorRecordController.createRecord
 
 router.put('/record/update/:id', checkAuthUser, factorRecordController.updateRecord);
 
-router.get('/record', checkAuthUser, factorRecordController.getRecords);
+router.get('/records', checkAuthUser, factorRecordController.getRecords);
 
 module.exports = router;

@@ -42,7 +42,7 @@ const submitRecord = async (req, res, next) => {
     await factorRecord.save();
   } catch (err) {
     err && console.error(err);
-    const error = new HttpError("Create course failed, please try again.", 500);
+    const error = new HttpError("Submit record failed, please try again.", 500);
     return next(error);
   }
 

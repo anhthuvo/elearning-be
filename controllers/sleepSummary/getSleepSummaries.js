@@ -1,8 +1,8 @@
-const FactorRecord = require("../../models/factor-record");
+const SleepSummary = require("../../models/sleep-summary");
 const HttpError = require("../../models/http-error");
 
 
-const getRecords = async (req, res, next) => {
+const getSleepSummarys = async (req, res, next) => {
   const { userId } = req.userData;
 
   if (!req.body.start_at || !req.body.end_at) {
@@ -11,9 +11,8 @@ const getRecords = async (req, res, next) => {
   }
   let records = [];
   try {
-    records = await FactorRecord.find({
-      start_at: { $gte: new Date(req.body.start_at) },
-      end_at: { $lte: new Date(req.body.end_at) },
+    records = await SleepSummary.find({
+      wakeup_at: { $gte: new Date(req.body.start_at), $lte: new Date(req.body.end_at) },
       user: userId,
     }).exec();
   } catch (err) {
@@ -25,11 +24,11 @@ const getRecords = async (req, res, next) => {
   res.status(201).json(records);
 };
 
-module.exports = getRecords;
+module.exports = getSleepSummarys;
 
 /**
  * @swagger
- * /api/factor/records:
+ * /api/factor/record:
  *   get:
  *     summary: get record in a range of timestamp
  *     description: token expire in 24 hour

@@ -7,6 +7,7 @@ const swaggerUi = require('swagger-ui-express');
 
 const factorRoutes = require('./routes/factor-routes');
 const userRoutes = require('./routes/user-routes');
+const sleepRoutes = require('./routes/sleep-routes');
 const HttpError = require('./models/http-error');
 const bodyParse = require('body-parser');
 const app = express();
@@ -48,6 +49,7 @@ const options = {
   './controllers/factorRecord/getRecords.js',
   './controllers/factorRecord/createRecord.js',
   './controllers/factorRecord/updateRecord.js',
+  './controllers/sleepRecord/createSleepRecord.js',
 ], // files containing annotations as above
 };
 
@@ -79,6 +81,7 @@ app.use((req, res, next) => {
 
 app.use('/api/users', userRoutes);
 app.use('/api/factors', factorRoutes);
+app.use('/api/sleep', sleepRoutes);
 
 app.use((req, res, next) => {
   const error = new HttpError('Could not find this route.', 404);
